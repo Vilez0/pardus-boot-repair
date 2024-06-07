@@ -8,6 +8,30 @@ on:
   workflow_dispatch:
 
 jobs:
+  translations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y make gettext libglib2.0-dev-bin
+
+      - name: update translations
+        run: make pot
+
+      - name: Add and commit changes
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -m "Update translations"
+
+      - name: Push changes
+        run: git push
+
   build:
     runs-on: ubuntu-latest
 
